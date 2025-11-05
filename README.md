@@ -89,14 +89,8 @@ If you re-train the model, save the artifacts and commit only lightweight pointe
 - `torch` not found or CUDA mismatch: reinstall `torch` with the matching CUDA support for your system.
 - Streamlit caching/loading issues: restart the Streamlit server when you update model files.
 
-## Recommended next steps / improvements
-
-- Add unit tests for preprocessing and parsing of model outputs.
-- Add a small API wrapper (FastAPI/Flask) to enable programmatic access.
-- Add a simple front-end form for administrators to manually correct parsed values before generating receipts.
-
 ## License & Acknowledgements
 
 This repository is provided as an example/demo. Review any third-party model or dataset license terms before using in production.
 
-Built with ❤️ using Hugging Face Transformers, Datasets, PyTorch, Streamlit and ReportLab.
+
