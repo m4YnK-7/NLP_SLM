@@ -62,7 +62,7 @@ Thumbs.db
 
 # Large data and model artifacts (do not commit trained models or datasets)
 models/
-data/
+# data/
 *.safetensors
 *.pt
 *.bin
