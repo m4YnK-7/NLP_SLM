@@ -213,7 +213,7 @@ def main():
     parser.add_argument("--num_beams", type=int, default=4)
     parser.add_argument("--max_length", type=int, default=128)
     parser.add_argument("--device", type=str, default=None)
-    parser.add_argument("--save_preds", type=str, default="./metrics_summary.json", help="Path to save predictions JSON")
+    parser.add_argument("--save_preds", type=str, default="metrics/metrics_summary.json", help="Path to save predictions JSON")
     args = parser.parse_args()
 
     device = torch.device(args.device or ("cuda" if torch.cuda.is_available() else "cpu"))

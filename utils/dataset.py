@@ -118,9 +118,9 @@ print("🔄 Generating synthetic dataset...")
 dataset = generate_dataset(num_samples=2000)
 
 # Save to file
-output_path = "data/fee_messages_instruction.json"
 import os
 os.makedirs("data", exist_ok=True)
+output_path = os.path.join("data", "fee_messages_instruction.json")
 
 with open(output_path, "w", encoding="utf-8") as f:
     json.dump(dataset, f, indent=4, ensure_ascii=False)

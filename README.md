@@ -4,6 +4,7 @@ Professional, end-to-end example project that demonstrates generating a syntheti
 
 ## Highlights
 - Synthetic dataset generator (human-like payment messages): `dataset.py`
+ - Synthetic dataset generator (human-like payment messages): `utils/dataset.py`
 - Training script using Hugging Face Transformers + Datasets: `train_model.py`
 - Streamlit web app that performs inference and generates printable PDF receipts: `app.py`
 - Model artifacts live in `models/flan_t5_fee_extractor/` (tokenizer + safetensors compatible model)
@@ -13,8 +14,10 @@ Professional, end-to-end example project that demonstrates generating a syntheti
 ```
 .
 ├─ app.py                  # Streamlit app for inference + PDF receipt generation
-├─ dataset.py              # Synthetic dataset generation (writes to data/fee_messages_instruction.json)
 ├─ train_model.py          # Training script using HF Trainer
+├─ utils/                  # Utility scripts
+│  ├─ dataset.py           # Synthetic dataset generation (writes to data/fee_messages_instruction.json)
+│  └─ eval_dataset.py      # Evaluation dataset helpers
 ├─ data/                   # Generated dataset (ignored by .gitignore)
 └─ models/                 # Fine-tuned model artifacts (ignored by .gitignore)
 ```
@@ -40,10 +43,10 @@ Notes:
 
 ## Generate the dataset
 
-The repository includes `dataset.py` which generates a synthetic dataset of payment messages and writes `data/fee_messages_instruction.json`.
+The repository includes `utils/dataset.py` which generates a synthetic dataset of payment messages and writes `data/fee_messages_instruction.json`.
 
 ```powershell
-python dataset.py
+python utils/dataset.py
 ```
 
 This creates ~2000 training samples by default. You can edit `dataset.py` to change sample count or templates.
@@ -85,7 +88,7 @@ If you re-train the model, save the artifacts and commit only lightweight pointe
 
 ## Model evaluation summary
 
-I ran an evaluation of the fine-tuned model and saved the full results to `metrics_summary.json` in the project root. Key highlights (1000 eval samples):
+I ran an evaluation of the fine-tuned model and saved the full results to `metrics/metrics_summary.json` (inside the `metrics/` folder). Key highlights (1000 eval samples):
 
 | Metric | Value |
 |---|---:|
@@ -118,7 +121,7 @@ Notes and interpretation:
 - Lower scores on `amount` and `roll_number` suggest the model sometimes changes formatting (currency tokens, prefixes like `RN`/`Roll_`) or omits/duplicates values in noisy templates — consider normalizing numeric formats in preprocessing and/or adding more diverse examples.
 - `date` and `institute` perform well but have a few misses — augmenting the training set with more date formats and institute name variations could help.
 
-See `metrics_summary.json` for the full predictions and the raw metrics object.
+See `metrics/metrics_summary.json` for the full predictions and the raw metrics object.
 
 ## Troubleshooting
 
