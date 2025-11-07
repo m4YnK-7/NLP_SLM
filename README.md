@@ -83,6 +83,43 @@ The project uses Hugging Face Transformers. A small pre-trained model name used 
 
 If you re-train the model, save the artifacts and commit only lightweight pointers (do not commit large model files) — the `.gitignore` excludes `models/` and `data/` by default.
 
+## Model evaluation summary
+
+I ran an evaluation of the fine-tuned model and saved the full results to `metrics_summary.json` in the project root. Key highlights (1000 eval samples):
+
+| Metric | Value |
+|---|---:|
+| Samples evaluated | 1000 |
+| Exact match | 23.1% |
+| Normalized exact match | 23.1% |
+| ROUGE-L (precision) | 0.8813 |
+| ROUGE-L (recall) | 0.9409 |
+| ROUGE-L (F1) | 0.8978 |
+| Latency mean (s / item) | 0.22596 |
+| Latency p50 (s) | 0.24202 |
+| Latency p95 (s) | 0.26678 |
+| Throughput (items / s) | 4.4256 |
+
+Per-field extraction metrics (precision / recall / F1):
+
+| Field | Precision | Recall | F1 | TP |
+|---|---:|---:|---:|---:|
+| student_name | 1.000 | 1.000 | 1.000 | 1000 |
+| transaction_id | 0.995 | 0.952 | 0.973 | 952 |
+| payment_name | 0.996 | 0.995 | 0.995 | 995 |
+| institute | 0.862 | 0.847 | 0.854 | 847 |
+| date | 1.000 | 0.957 | 0.978 | 957 |
+| roll_number | 0.511 | 0.511 | 0.511 | 511 |
+| amount | 0.473 | 0.473 | 0.473 | 473 |
+
+Notes and interpretation:
+
+- High performance on textual fields like `student_name`, `transaction_id`, and `payment_name` indicates the model reliably copies or formats those values from messages.
+- Lower scores on `amount` and `roll_number` suggest the model sometimes changes formatting (currency tokens, prefixes like `RN`/`Roll_`) or omits/duplicates values in noisy templates — consider normalizing numeric formats in preprocessing and/or adding more diverse examples.
+- `date` and `institute` perform well but have a few misses — augmenting the training set with more date formats and institute name variations could help.
+
+See `metrics_summary.json` for the full predictions and the raw metrics object.
+
 ## Troubleshooting
 
 - Model loading fails with OOM: reduce `per_device_train_batch_size` or use gradient accumulation. Consider training on a machine with more GPU RAM.
